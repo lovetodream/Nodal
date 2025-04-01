@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: SwiftyLab/setup-swift@latest
+    - uses: swift-actions/setup-swift@v2
     - uses: actions/checkout@v4
       with:
         submodules: true
