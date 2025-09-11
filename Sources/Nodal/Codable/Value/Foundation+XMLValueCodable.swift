@@ -149,6 +149,17 @@ extension UInt64: XMLValueCodable {
     }
 }
 
+extension UUID: XMLValueCodable {
+    public var xmlStringValue: String { uuidString }
+
+    public init(xmlStringValue: String) throws {
+        guard let value = UUID(uuidString: xmlStringValue) else {
+            throw XMLValueError.invalidFormat(expected: "UUID", found: xmlStringValue)
+        }
+        self = value
+    }
+}
+
 extension RawRepresentable where RawValue: XMLValueEncodable {
     public var xmlStringValue: String {
         rawValue.xmlStringValue
