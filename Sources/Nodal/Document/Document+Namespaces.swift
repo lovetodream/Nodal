@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 public extension Document {
     /// A set of namespace names that are referenced in the document but have not been declared.
@@ -117,22 +117,22 @@ internal extension Document {
         }
     }
 
-    private func removeNamespaceDeclarations(for nodes: Set<pugi.xml_node>) {
+    private func removeNamespaceDeclarations(for nodes: Set<HashableNode>) {
         namespaceDeclarationsByName = namespaceDeclarationsByName.mapValues {
-            $0.filter { !nodes.contains($0.node) }
+            $0.filter { !nodes.contains(HashableNode($0.node)) }
         }
         namespaceDeclarationsByPrefix = namespaceDeclarationsByPrefix.mapValues {
-            $0.filter { !nodes.contains($0.node) }
+            $0.filter { !nodes.contains(HashableNode($0.node)) }
         }
     }
 
     func removeNamespaceDeclarations(for tree: pugi.xml_node, excludingTarget: Bool = false) {
-        let descendants = Set(tree.descendants.filter { $0.type() == pugi.node_element && (!excludingTarget || $0 != tree) })
+        let descendants = Set(tree.descendants.filter { $0.type() == pugi.node_element && (!excludingTarget || $0 != tree) }.map { HashableNode($0) })
         removeNamespaceDeclarations(for: descendants)
     }
 
     func rebuildNamespaceDeclarationCache(for element: Node) {
-        removeNamespaceDeclarations(for: [element.node])
+        removeNamespaceDeclarations(for: [HashableNode(element.node)])
         addNamespaceDeclarations(for: element.node)
     }
 

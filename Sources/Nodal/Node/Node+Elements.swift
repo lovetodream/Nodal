@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 public extension Node {
     /// The parent element of this node, or `nil` if its parent is not an element.
@@ -19,21 +19,41 @@ public extension Node {
 
     /// Retrieves the first child element with the specified name.
     ///
-    /// - Parameter name: The name of the child element to retrieve; either a `String` or an `ExpandedName`.
+    /// - Parameter name: The name of the child element to retrieve.
     /// - Returns: The first child element with the specified name, or `nil` if no such element exists.
-    subscript(element name: any ElementName) -> Node? {
+    subscript(element name: String) -> Node? {
         node.children.lazy.first {
-            $0.type() == pugi.node_element && name.matches(node: $0, in: document)
+            $0.type() == pugi.node_element && name.matchesElementName(node: $0, in: document)
+        }?.wrapped(in: document)
+    }
+
+    /// Retrieves the first child element with the specified expanded name.
+    ///
+    /// - Parameter name: The expanded name of the child element to retrieve.
+    /// - Returns: The first child element with the specified name, or `nil` if no such element exists.
+    subscript(element name: ExpandedName) -> Node? {
+        node.children.lazy.first {
+            $0.type() == pugi.node_element && name.matchesElementName(node: $0, in: document)
         }?.wrapped(in: document)
     }
 
     /// Retrieves all child elements with the specified name.
     ///
-    /// - Parameter name: The name of the child elements to retrieve; either a `String` or an `ExpandedName`.
+    /// - Parameter name: The name of the child elements to retrieve.
     /// - Returns: An array of child elements with the specified name.
-    subscript(elements name: any ElementName) -> [Node] {
+    subscript(elements name: String) -> [Node] {
         node.children.lazy.filter {
-            $0.type() == pugi.node_element && name.matches(node: $0, in: document)
+            $0.type() == pugi.node_element && name.matchesElementName(node: $0, in: document)
+        }.map { $0.wrapped(in: document) }
+    }
+
+    /// Retrieves all child elements with the specified expanded name.
+    ///
+    /// - Parameter name: The expanded name of the child elements to retrieve.
+    /// - Returns: An array of child elements with the specified name.
+    subscript(elements name: ExpandedName) -> [Node] {
+        node.children.lazy.filter {
+            $0.type() == pugi.node_element && name.matchesElementName(node: $0, in: document)
         }.map { $0.wrapped(in: document) }
     }
 
@@ -62,14 +82,28 @@ public extension Node {
     /// Adds a new child element with the specified name to this element at the given position.
     ///
     /// - Parameters:
-    ///   - name: The name of the new element; either a `String` or an `ExpandedName`.
+    ///   - name: The name of the new element.
     ///   - position: The position where the new child element should be inserted. Defaults to `.last`, adding the element as the last child of this element.
     /// - Returns: The newly created child element.
     @discardableResult
-    func addElement(_ name: any ElementName, at position: Position = .last) -> Node {
+    func addElement(_ name: String, at position: Position = .last) -> Node {
         precondition(canContainChildren(ofKind: .element), "This kind of node can't contain elements")
         let element = document.node(for: node.addChild(kind: pugi.node_element, at: position))
-        element.name = name.requestQualifiedName(for: element)
+        element.name = name
+        return element
+    }
+
+    /// Adds a new child element with the specified expanded name to this element at the given position.
+    ///
+    /// - Parameters:
+    ///   - name: The expanded name of the new element.
+    ///   - position: The position where the new child element should be inserted. Defaults to `.last`, adding the element as the last child of this element.
+    /// - Returns: The newly created child element.
+    @discardableResult
+    func addElement(_ name: ExpandedName, at position: Position = .last) -> Node {
+        precondition(canContainChildren(ofKind: .element), "This kind of node can't contain elements")
+        let element = document.node(for: node.addChild(kind: pugi.node_element, at: position))
+        element.name = name.requestQualifiedElementName(for: element)
         return element
     }
 

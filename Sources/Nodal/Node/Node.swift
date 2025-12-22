@@ -1,6 +1,6 @@
 import Foundation
-import pugixml
-import Bridge
+@_implementationOnly import pugixml
+@_implementationOnly import Bridge
 
 /// Represents a node in an XML document.
 ///
@@ -36,7 +36,7 @@ extension Node: Equatable, Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(node)
+        hasher.combine(node.internal_object())
     }
 }
 

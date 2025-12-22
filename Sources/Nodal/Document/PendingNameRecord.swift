@@ -1,10 +1,10 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 internal class PendingNameRecord {
     var elementName: ExpandedName?
     var attributes: [ExpandedName: String] = [:] // value = qName
-    var ancestors: Set<pugi.xml_node> = .init(minimumCapacity: 8) // Ancestors, including the element itself
+    var ancestors: Set<HashableNode> = .init(minimumCapacity: 8) // Ancestors, including the element itself
 
     private static let pendingPrefix = "__pending"
 
@@ -18,7 +18,7 @@ internal class PendingNameRecord {
 
         var node = element
         while !node.empty() {
-            ancestors.insert(node)
+            ancestors.insert(HashableNode(node))
             node = node.parent()
         }
     }
@@ -35,13 +35,13 @@ internal class PendingNameRecord {
         ancestors = []
         var node = element
         while !node.empty() {
-            ancestors.insert(node)
+            ancestors.insert(HashableNode(node))
             node = node.parent()
         }
     }
 
     func belongsToTree(_ node: Node) -> Bool {
-        ancestors.contains(node.node)
+        ancestors.contains(HashableNode(node.node))
     }
 
     private func pendingPlaceholder(for name: ExpandedName) -> String {

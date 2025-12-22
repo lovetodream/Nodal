@@ -1,11 +1,24 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
-extension pugi.xml_node: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(internal_object())
+// Wrapper to make pugi.xml_node Hashable without exposing it in the public interface
+internal struct HashableNode: Hashable {
+    let node: pugi.xml_node
+
+    init(_ node: pugi.xml_node) {
+        self.node = node
     }
 
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(node.internal_object())
+    }
+
+    static func == (lhs: HashableNode, rhs: HashableNode) -> Bool {
+        lhs.node == rhs.node
+    }
+}
+
+internal extension pugi.xml_node {
     var nonNull: pugi.xml_node? {
         empty() ? nil : self
     }

@@ -1,6 +1,6 @@
 import Foundation
-import pugixml
-import Bridge
+@_implementationOnly import pugixml
+@_implementationOnly import Bridge
 
 public extension Node {
     /// The parent node of this node, or `nil` if this node has no parent.
@@ -101,8 +101,8 @@ public extension Node {
         internal func validate(for parent: pugi.xml_node) -> Bool {
             switch self {
             case .first, .last: true
-            case .before (let node): node.parent?.node == parent
-            case .after (let node): node.parent?.node == parent
+            case .before (let node): node.parent.map { $0.node == parent } ?? false
+            case .after (let node): node.parent.map { $0.node == parent } ?? false
             }
         }
     }

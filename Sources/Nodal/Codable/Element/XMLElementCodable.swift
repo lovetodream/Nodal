@@ -35,6 +35,7 @@ public protocol XMLElementDecodable {
 public typealias XMLElementCodable = XMLElementEncodable & XMLElementDecodable
 
 public enum XMLElementCodableError: Error {
-    case elementMissing (any ElementName)
+    case elementMissing (String)
+    case expandedElementMissing (ExpandedName)
     case documentElementMissing
 }

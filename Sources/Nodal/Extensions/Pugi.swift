@@ -1,8 +1,6 @@
-import pugixml
-import Bridge
+@_implementationOnly import pugixml
+@_implementationOnly import Bridge
 import Foundation
-
-extension pugi.xml_node_type: Hashable {}
 
 extension pugi.xml_attribute {
     var nonNull: pugi.xml_attribute? {
