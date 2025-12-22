@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 internal extension Node {
     var hasNamespaceDeclarations: Bool {

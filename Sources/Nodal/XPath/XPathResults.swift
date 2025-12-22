@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 public extension XPathQuery {
     /// The type of the result produced by this XPath query.

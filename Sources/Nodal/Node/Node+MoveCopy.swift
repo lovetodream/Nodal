@@ -1,6 +1,6 @@
 import Foundation
-import pugixml
-import Bridge
+@_implementationOnly import pugixml
+@_implementationOnly import Bridge
 
 public extension Node {
     /// Moves this node to a new parent node at the specified position within the parent's children.

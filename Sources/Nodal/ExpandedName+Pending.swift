@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 internal extension ExpandedName {
     init(effectiveQualifiedAttributeName qName: String, in element: Node) {

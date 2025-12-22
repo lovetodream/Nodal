@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 internal extension Node {
     func value(forAttribute name: String) -> String? {
