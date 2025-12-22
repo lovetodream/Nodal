@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 internal extension Document {
     func pendingNameRecord(for element: Node) -> PendingNameRecord? {
@@ -49,7 +49,7 @@ internal extension Document {
             if excludingTarget && node == nodePointer {
                 return false
             }
-            return record.ancestors.contains(ancestor.node)
+            return record.ancestors.contains(HashableNode(ancestor.node))
         }.map(\.key)
 
         for key in keys { pendingNamespaceRecords[key] = nil }

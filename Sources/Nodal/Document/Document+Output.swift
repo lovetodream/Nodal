@@ -1,6 +1,6 @@
 import Foundation
-import pugixml
-import Bridge
+@_implementationOnly import pugixml
+@_implementationOnly import Bridge
 
 internal extension Document {
     private func save(encoding: String.Encoding = .utf8,

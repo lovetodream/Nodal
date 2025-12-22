@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 public extension Document {
     struct ParseOptions: OptionSet, Sendable {

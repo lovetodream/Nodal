@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 public extension Node {
     /// The child nodes of this node.

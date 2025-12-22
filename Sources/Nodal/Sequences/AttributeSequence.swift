@@ -1,5 +1,5 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
 // Visits all attributes of the target
 internal struct AttributeSequence: Sequence, IteratorProtocol {

@@ -1,26 +1,14 @@
 import Foundation
-import pugixml
+@_implementationOnly import pugixml
 
-public protocol ElementName: Sendable {
-    func requestQualifiedName(for node: Node) -> String
-    func matches(node: pugi.xml_node, in document: Document) -> Bool
-}
-
-extension String: ElementName {
-    public func requestQualifiedName(for node: Node) -> String {
-        self
-    }
-    public func matches(node: pugi.xml_node, in document: Document) -> Bool {
+internal extension String {
+    func matchesElementName(node: pugi.xml_node, in document: Document) -> Bool {
         String(cString: node.name()) == self
     }
 }
 
-extension ExpandedName: ElementName {
-    public func requestQualifiedName(for node: Node) -> String {
-        requestQualifiedElementName(for: node)
-    }
-
-    public func matches(node: pugi.xml_node, in document: Document) -> Bool {
+internal extension ExpandedName {
+    func matchesElementName(node: pugi.xml_node, in document: Document) -> Bool {
         String(cString: node.name()).hasSuffix(localName) && document.expandedName(for: node) == self
     }
 }
