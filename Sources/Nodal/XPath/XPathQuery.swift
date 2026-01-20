@@ -69,22 +69,22 @@ public extension XPathQuery {
     /// Evaluates the XPath expression as a set of nodes relative to the specified base node.
     ///
     /// - Parameter baseNode: The node against which to evaluate the XPath query.
-    /// - Returns: An array of `XPathNode` objects representing the nodes matching the query.
-    func nodesResult(with baseNode: Node) -> [XPathNode] {
+    /// - Returns: An array of `Node` objects representing the nodes matching the query.
+    func nodesResult(with baseNode: Node) -> [Node] {
         let nodeSet = query.evaluate_node_set(.init(baseNode.node))
-        return nodeSet.nodes.map { XPathNode(xPathNode: $0, document: baseNode.document) }
+        return nodeSet.nodes.map { Node(document: baseNode.document, node: $0.node()) }
     }
 
     /// Evaluates the XPath expression as a single node relative to the specified base node.
     ///
     /// - Parameter baseNode: The node against which to evaluate the XPath query.
-    /// - Returns: A `XPathNode` object representing the first node matching the query.
-    func firstNodeResult(with baseNode: Node) -> XPathNode? {
+    /// - Returns: A `Node` object representing the first node matching the query.
+    func firstNodeResult(with baseNode: Node) -> Node? {
         let xPathNode = query.__evaluate_nodeUnsafe(.init(baseNode.node))
         if xPathNode.node().empty() {
             return nil
         }
-        return XPathNode(xPathNode: xPathNode, document: baseNode.document)
+        return Node(document: baseNode.document, node: xPathNode.node())
     }
 
     /// Represents an error that occurs when parsing an XPath expression.
